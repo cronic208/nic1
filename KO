@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Not for general consumption; a script I used to make sure
+# I do not accidentally push a rewound master to public.
+
+MASTER=master
+
+no_fetch= ko=ko
+while :
+do
+	case "$#,$1" in
+	0,*) break ;;
+	*,--no-fetch) no_fetch=t; shift ;;
+	*,--*) echo >&2 "unknown option $1"; exit 1 ;;
+	*) ko=$1; shift ;;
+	esac
+done
+
+if test -z "$no_fetch"
+then
+	git fetch "$ko"
+fi
+
+mb=$(git merge-base $ko/$MASTER $MASTER)
+h=$(git rev-parse $mb $ko/$MASTER | sort -u | wc -l)
+if test "$h" != 1
+then
+	echo "OOOOOPPPPPPPPPPPPPPSSS! $MASTER is not $ko/$MASTER fast forward."
+	exit 1
+fi
+git show-branch --topo-order $ko/$MASTER $MASTER
+git show-branch --topo-order $ko/maint maint
+git show-branch --topo-order $ko/next next
+git show-branch --topo-order $ko/seen seen
