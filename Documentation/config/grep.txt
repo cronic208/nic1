@@ -1,0 +1,38 @@
+grep.lineNumber::
+	If set to true, enable `-n` option by default.
+
+grep.column::
+	If set to true, enable the `--column` option by default.
+
+grep.patternType::
+	Set the default matching behavior. Using a value of 'basic', 'extended',
+	'fixed', or 'perl' will enable the `--basic-regexp`, `--extended-regexp`,
+	`--fixed-strings`, or `--perl-regexp` option accordingly, while the
+	value 'default' will return to the default matching behavior.
+
+grep.extendedRegexp::
+	If set to true, enable `--extended-regexp` option by default. This
+	option is ignored when the `grep.patternType` option is set to a value
+	other than 'default'.
+
+grep.threads::
+	Number of grep worker threads to use. See `--threads`
+ifndef::git-grep[]
+	in linkgit:git-grep[1]
+endif::git-grep[]
+	for more information.
+
+grep.fullName::
+	If set to true, enable `--full-name` option by default.
+
+grep.fallbackToNoIndex::
+	If set to true, fall back to git grep --no-index if git grep
+	is executed outside of a git repository.  Defaults to false.
+
+ifdef::git-grep[]
+sparse.restrictCmds::
+	See base definition in linkgit:git-config[1]. grep honors
+	sparse.restrictCmds by limiting searches to the sparsity paths in three
+	cases: when searching the working tree, when searching the index with
+	--cached, and when searching a specified commit.
+endif::git-grep[]
